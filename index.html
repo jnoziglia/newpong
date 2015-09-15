@@ -2,10 +2,13 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
-	var socket = io('http://notifications.includeweb.com.ar');
+	var socket = io('http://pong.includeweb.com.ar');
 	var ctx;
 	var canvas;
 	var id;
+	var speed = 0;
+	var myPos = 250;
+	var otherPos = 250;
 	socket.on('news', function (data) {	
 		console.log(data);
 		socket.emit('my other event', { my: 'data' });
@@ -18,8 +21,21 @@
 
 	socket.on('position', function(data) {
 		console.log(data.position);
+		myPos = data.position1;
+		otherPos = data.position2;
+		if (id == 1) {
+			speed = data.speed1;
+		}
+		else{
+			speed = data.speed2;
+		}
 		clearCanvas(data.position1, data.position2);
 	});
+
+	setInterval(function(){ 
+    myPos += speed;
+    clearCanvas(myPos, otherPos);
+  }, 33);
 
 	function clearCanvas(pos1, pos2) {
 		canvas.width = canvas.width;

@@ -42,7 +42,7 @@ io.on('connection', function (socket) {
   setTimeout(function(){ setInterval(function(){ 
     player1.position += player1.speed;
     player2.position += player2.speed;
-    socket.emit('position', { position1: player1.position,  position2: player2.position});
+    socket.emit('position', { position1: player1.position,  position2: player2.position, speed1: player1.position, speed2: player2.position });
   }, 33); }, 3000);
 
   
