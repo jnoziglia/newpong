@@ -21,13 +21,16 @@
 
 	socket.on('position', function(data) {
 		console.log(data.position);
-		myPos = data.position1;
-		otherPos = data.position2;
+		
 		if (id == 1) {
 			speed = data.speed1;
+			myPos = data.position1;
+			otherPos = data.position2;
 		}
 		else{
 			speed = data.speed2;
+			myPos = data.position2;
+			otherPos = data.position1;
 		}
 		clearCanvas(data.position1, data.position2);
 	});
