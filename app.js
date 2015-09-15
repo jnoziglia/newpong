@@ -6,6 +6,8 @@ var fs = require('fs');
 var speed = 0;*/
 
 var contador = 0;
+var player1 = new player(1);
+var player2 = new player(2);
 
 app.listen(80);
 
@@ -31,11 +33,16 @@ function player(id) {
 io.on('connection', function (socket) {
   socket.emit('news', { hello: 'world' });
 
+  contador++;
+  console.log(contador);
+  socket.emit('newPlayer', { player: contador } );
+
 
 
   setTimeout(function(){ setInterval(function(){ 
-    position += speed;
-    socket.emit('position', { position: position });
+    player1.position += player1.speed;
+    player2.position += player2.speed;
+    socket.emit('position', { position1: player1.position,  position2: player2.position});
   }, 33); }, 3000);
 
   
@@ -45,14 +52,29 @@ io.on('connection', function (socket) {
   });
 
   socket.on('up', function(data) {
-    speed = -5;
+  	if (data.player == 1) {
+    	player1.speed = -5;
+  	}
+  	else{
+  		player2.speed = -5;
+  	}
   });
 
   socket.on('down', function(data) {
-    speed = 5;
+    if (data.player == 1) {
+    	player1.speed = 5;
+  	}
+  	else{
+  		player2.speed = 5;
+  	}
   });
 
   socket.on('stop', function(data) {
-    speed = 0;
+    if (data.player == 1) {
+    	player1.speed = 0;
+  	}
+  	else{
+  		player2.speed = 0;
+  	}
   });
 });

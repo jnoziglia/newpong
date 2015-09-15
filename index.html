@@ -5,20 +5,27 @@
 	var socket = io('http://localhost');
 	var ctx;
 	var canvas;
+	var id;
 	socket.on('news', function (data) {	
 		console.log(data);
 		socket.emit('my other event', { my: 'data' });
 	});
 
+	socket.on('newPlayer', function(data) {
+		id = data.player;
+		console.log(id);
+	})
+
 	socket.on('position', function(data) {
 		console.log(data.position);
-		clearCanvas(data.position);
+		clearCanvas(data.position1, data.position2);
 	});
 
-	function clearCanvas(pos) {
+	function clearCanvas(pos1, pos2) {
 		canvas.width = canvas.width;
 		ctx.fillStyle = "white";
-		ctx.rect(10,pos,10,100);
+		ctx.rect(10,pos1,10,100);
+		ctx.rect(780,pos2,10,100);
 		ctx.fill();
 	}
 
@@ -27,6 +34,7 @@
 		ctx=canvas.getContext("2d");
 		ctx.fillStyle = "white";
 		ctx.rect(10,250,10,100);
+		ctx.rect(780,250,10,100);
 		ctx.fill();
 
 		$(document).keydown(function(e) {
@@ -35,14 +43,14 @@
 		        break;
 
 		        case 38: // up
-		        socket.emit('up');
+		        socket.emit('up', {player: id});
 		        break;
 
 		        case 39: // right
 		        break;
 
 		        case 40: // down
-		        socket.emit('down');
+		        socket.emit('down', {player: id});
 		        break;
 
 		        default: return; // exit this handler for other keys
@@ -51,7 +59,7 @@
 		});
 
 		$(document).keyup(function(e) {
-		    socket.emit('stop');
+		    socket.emit('stop', {player: id});
 		});
 	});
 
