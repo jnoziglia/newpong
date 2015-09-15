@@ -1,0 +1,62 @@
+<head>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+	var socket = io('http://localhost');
+	var ctx;
+	var canvas;
+	socket.on('news', function (data) {	
+		console.log(data);
+		socket.emit('my other event', { my: 'data' });
+	});
+
+	socket.on('position', function(data) {
+		console.log(data.position);
+		clearCanvas(data.position);
+	});
+
+	function clearCanvas(pos) {
+		canvas.width = canvas.width;
+		ctx.fillStyle = "white";
+		ctx.rect(10,pos,10,100);
+		ctx.fill();
+	}
+
+	$(document).ready(function() {
+		canvas=document.getElementById("myCanvas");
+		ctx=canvas.getContext("2d");
+		ctx.fillStyle = "white";
+		ctx.rect(10,250,10,100);
+		ctx.fill();
+
+		$(document).keydown(function(e) {
+		    switch(e.which) {
+		        case 37: // left
+		        break;
+
+		        case 38: // up
+		        socket.emit('up');
+		        break;
+
+		        case 39: // right
+		        break;
+
+		        case 40: // down
+		        socket.emit('down');
+		        break;
+
+		        default: return; // exit this handler for other keys
+		    }
+		    e.preventDefault(); // prevent the default action (scroll / move caret)
+		});
+
+		$(document).keyup(function(e) {
+		    socket.emit('stop');
+		});
+	});
+
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" width="800" height="600" style="background-color:#000000;"></canvas>
+</body>
