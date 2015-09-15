@@ -9,7 +9,7 @@ var contador = 0;
 var player1 = new player(1);
 var player2 = new player(2);
 
-app.listen(80);
+app.listen(5000);
 
 function handler (req, res) {
   fs.readFile(__dirname + '/index.html',
