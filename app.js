@@ -9,7 +9,7 @@ var contador = 0;
 var player1 = new player(1);
 var player2 = new player(2);
 
-app.listen(5000);
+app.listen(5022);
 
 function handler (req, res) {
   fs.readFile(__dirname + '/index.html',
@@ -42,7 +42,7 @@ io.on('connection', function (socket) {
   setTimeout(function(){ setInterval(function(){ 
     player1.position += player1.speed;
     player2.position += player2.speed;
-    socket.emit('position', { position1: player1.position,  position2: player2.position});
+    socket.volatile.emit('position', { position1: player1.position,  position2: player2.position});
   }, 33); }, 3000);
 
   
